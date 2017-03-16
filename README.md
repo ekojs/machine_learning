@@ -6,7 +6,7 @@
 Contoh menggunakan nodejs console :
 
 ```javascript
-var ejs_kmeans = require('./ejs_kmeans');
+var ejs_kmeans = require('./unsupervised/ejs_kmeans');
 function TestData(samples,centroid){
 	console.log('Samples Data : %s \n','('+samples.join(') (')+')');
 	var k_means = new ejs_kmeans.k_mean_cluster(samples);
@@ -34,6 +34,12 @@ Penggunaan Backpropagation disini, penulis **masih** menggunakan fungsi aktivasi
 Contoh menggunakan nodejs console :
 
 ```javascript
+var ejs_neural = require('./supervised/ejs_neural');
+var opt = {
+	learning_rate:0.05,
+	momentum:0.01,
+	maxEpochs:500
+};
 // var TT = [[-1,-1,1,-1],[-1,1,1,1],[1,-1,1,1],[1,1,1,-1]]; // xor
 // var TT = [[-1,-1,1,-1],[-1,1,1,-1],[1,-1,1,-1],[1,1,1,1]]; // and
 var TT = [[-1,-1,1,-1],[-1,1,1,1],[1,-1,1,1],[1,1,1,1]]; // or
