@@ -1,7 +1,7 @@
 ### Machine Learning & Computational Intelligence
 #### Berisi kumpulan algoritma dari Machine Learning dan Computational Intelligance
 
-### K-Means Clustering Algorithm
+### 1. K-Means Clustering Algorithm
 
 Contoh menggunakan nodejs console :
 
@@ -21,4 +21,41 @@ TestData([[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91
 //TestData([[1,1],[2,1],[4,3],[5,4]],[[1,1],[2,1]]);
 //TestData([[1,1,2],[2,1,3],[4,3,2],[5,4,4],[4,4,4]],[[1,1,2],[2,1,3]]);
 //TestData([[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]],[[5.09,5.80], [3.24,5.90], [1.68,4.90]]);
+```
+
+Baca artikel pada [`K-Means Clustering Algorithm`](http://ekojunaidisalam.com/2017/02/09/k-means-clustering-algorithm/)
+
+Simulasi program di [`sini`](https://ekojs.github.io/ejs_k-means/)
+
+### 2. Backpropagation Neural Network
+
+Penggunaan Backpropagation disini, penulis **masih** menggunakan fungsi aktivasi secara **hardcode**, fungsi aktivasi pada IH menggunakan `TANH` sedangkan pada HO menggunakan fungsi aktivasi `SOFTMAX` dan 'SIGMOID` untuk **Binary Classification**.
+
+Contoh menggunakan nodejs console :
+
+```javascript
+// var TT = [[-1,-1,1,-1],[-1,1,1,1],[1,-1,1,1],[1,1,1,-1]]; // xor
+// var TT = [[-1,-1,1,-1],[-1,1,1,-1],[1,-1,1,-1],[1,1,1,1]]; // and
+var TT = [[-1,-1,1,-1],[-1,1,1,1],[1,-1,1,1],[1,1,1,1]]; // or
+// var json = '{"0":-1.8570453538530167,"1":-1.0578781246699556,"2":1.6716922611300928,"3":-1.1001127357871128,"4":1.8538154659419666,"5":-1.124630964477959,"6":-1.677438527019374,"7":-1.0075326202144037,"8":-1.0230813212370369,"9":0.46272458742612566,"10":-0.6512284898272416,"11":-0.6612252388250472,"12":-0.9230821882924356,"13":0.7306611846866936,"14":-1.066699519330741,"15":-0.5033335760896673,"16":3.412458805650443,"17":1.6494378062956072,"18":3.3143332296912598,"19":-1.6840062015951618,"20":0.2616096437809812}';
+var nn = new ejs_neural.Neural(3,4,1,opt);
+// tes.fromJSON(json);
+// nn.initWeights(ejs_neural.range(0.01,3*4+4+4*1+1,0.01))
+nn.train(TT);
+// var data = nn.makeTrainTest(TT);
+// console.log(data);
+// console.log('Mulai training ...');
+// nn.train(data.data_training);
+// console.log('Training selesai ...');
+// console.log('--------------- Final nn weights -----------------');
+// console.log(nn.toJSON());
+// console.log('--------------------------------------------------');
+// console.log('Akurasi data training : %d',nn.accuracy(data.data_training));
+// console.log('Akurasi data test : %d',nn.accuracy(data.data_test));
+console.log('Akurasi data : %d',nn.accuracy(TT));
+
+console.log('Actual %d, prediction : %d',-1,nn.forward([-1,-1,1]).outputs[0]); // -1 or
+console.log('Actual %d, prediction : %d',1,nn.forward([1,1,1]).outputs[0]); // 1 or
+console.log('Actual %d, prediction : %d',1,nn.forward([-1,1,1]).outputs[0]); // 1 or
+console.log('Actual %d, prediction : %d',1,nn.forward([1,-1,1]).outputs[0]); // 1 or
 ```
