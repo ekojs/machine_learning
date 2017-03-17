@@ -1,5 +1,5 @@
 /* Program: Artificial Neural Network Algorithm
-Version : 1.2.0
+Version : 1.2.1
 Language : Javascript
 Description : Penerapan ANN pada Javascript
 Author : Eko Junaidi Salam
@@ -229,6 +229,19 @@ var ejs_neural = ejs_neural || {REVISION: 'ALPHA' };
 		return array;
 	}
 	
+	var gaussNorm = function(x,rng){
+		if(!Object.prototype.toString.call(rng) === '[object Array]'){
+			throw new Error('Param ke 2 harus array');
+		}
+		var n = rng.length;
+		var mean = rng.reduce(function(a,b){return a+b;})/n;
+		var sums = 0;
+		for(var i=0;i<rng.length;i++){
+			sums += Math.pow(rng[i]-mean,2);
+		}
+		return (x-mean)/(Math.sqrt(sums/n));
+	};
+	
 	var euclidean_distance = function(c,d){
 		var dist = 0;
 		if(c.length == d.length){
@@ -281,6 +294,7 @@ var ejs_neural = ejs_neural || {REVISION: 'ALPHA' };
 	global.softmaxNaive = softmaxNaive;
 	global.maxmin = maxmin;
 	global.randperm = randperm;
+	global.gaussNorm = gaussNorm;
 	global.euclidean_distance = euclidean_distance;
 	global.manhattan_distance = manhattan_distance;
 	global.assert = assert;

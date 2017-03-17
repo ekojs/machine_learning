@@ -47,11 +47,11 @@ console.log(nn.forward([6.4,3.2,4.5,1.5]).outputs); //010
 console.log(nn.forward([5.5,2.5,4,1.3]).outputs); //010 */
 
 
-// var TT = [[-1,-1,1,-1],[-1,1,1,1],[1,-1,1,1],[1,1,1,-1]]; // xor
-// var TT = [[-1,-1,1,-1],[-1,1,1,-1],[1,-1,1,-1],[1,1,1,1]]; // and
-var TT = [[-1,-1,1,-1],[-1,1,1,1],[1,-1,1,1],[1,1,1,1]]; // or
+/* // var TT = [[-1,-1,-1],[-1,1,1],[1,-1,1],[1,1,-1]]; // xor
+// var TT = [[-1,-1,-1],[-1,1,-1],[1,-1,-1],[1,1,1]]; // and
+var TT = [[-1,-1,-1],[-1,1,1],[1,-1,1],[1,1,1]]; // or
 // var json = '{"0":-1.8570453538530167,"1":-1.0578781246699556,"2":1.6716922611300928,"3":-1.1001127357871128,"4":1.8538154659419666,"5":-1.124630964477959,"6":-1.677438527019374,"7":-1.0075326202144037,"8":-1.0230813212370369,"9":0.46272458742612566,"10":-0.6512284898272416,"11":-0.6612252388250472,"12":-0.9230821882924356,"13":0.7306611846866936,"14":-1.066699519330741,"15":-0.5033335760896673,"16":3.412458805650443,"17":1.6494378062956072,"18":3.3143332296912598,"19":-1.6840062015951618,"20":0.2616096437809812}';
-var nn = new ejs_neural.Neural(3,4,1,opt);
+var nn = new ejs_neural.Neural(2,2,1,opt);
 // tes.fromJSON(json);
 // nn.initWeights(ejs_neural.range(0.01,3*4+4+4*1+1,0.01))
 nn.train(TT);
@@ -67,13 +67,38 @@ nn.train(TT);
 // console.log('Akurasi data test : %d',nn.accuracy(data.data_test));
 console.log('Akurasi data : %d',nn.accuracy(TT));
 
-console.log('Actual %d, prediction : %d',-1,nn.forward([-1,-1,1]).outputs[0]); // -1 or
-console.log('Actual %d, prediction : %d',1,nn.forward([1,1,1]).outputs[0]); // 1 or
-console.log('Actual %d, prediction : %d',1,nn.forward([-1,1,1]).outputs[0]); // 1 or
-console.log('Actual %d, prediction : %d',1,nn.forward([1,-1,1]).outputs[0]); // 1 or
+console.log('Actual %d, prediction : %d',-1,nn.forward([-1,-1]).outputs[0]); // -1 or
+console.log('Actual %d, prediction : %d',1,nn.forward([1,1]).outputs[0]); // 1 or
+console.log('Actual %d, prediction : %d',1,nn.forward([-1,1]).outputs[0]); // 1 or
+console.log('Actual %d, prediction : %d',1,nn.forward([1,-1]).outputs[0]); // 1 or */
 
 
 // ---------------------------------------------------- EOF Backpropagation Neural Network ----------------------------------------------------------
+
+
+var TT = [[-1.243932643,1.083472678,1,0,0,0,0,0,0,1,0],[0.53311399,-0.361157559,0,0,0,1,0,0,0,0,1],[0.177704663,-1.805787796,0,1,0,0,1,0,0,1,0],[1.59934197,0.361157559,1,0,0,0,1,0,0,0,1],[-1.243932643,1.083472678,0,0,1,0,0,0,1,0,0],[0.177704663,-0.361157559,0,0,0,1,0,0,0,1,0]];
+var nn = new ejs_neural.Neural(8,11,3,opt);
+nn.train(TT);
+
+console.log('Akurasi data : %d',nn.accuracy(TT));
+var res = nn.forward([-1.243932643,1.083472678,1,0,0,0,0,0]).outputs;
+console.log('Actual %s, prediction : %d %d %d','0 1 0',res[0],res[1],res[2]);
+var res = nn.forward([1.59934197,0.361157559,1,0,0,0,1,0]).outputs;
+console.log('Actual %s, prediction : %d %d %d','0 0 1',res[0],res[1],res[2]);
+var res = nn.forward([-1.243932643,1.083472678,0,0,1,0,0,0]).outputs;
+console.log('Actual %s, prediction : %d %d %d','1 0 0',res[0],res[1],res[2]);
+var res = nn.forward([-0.164152697,0.928279122,1,0,0,1,0,0]).outputs;
+console.log('Actual %s, prediction : %d %d %d','? ? ?',res[0],res[1],res[2]);
+var res = nn.forward([-1.656360008,-0.474578998,0,1,0,0,0,0]).outputs;
+console.log('Actual %s, prediction : %d %d %d','? ? ?',res[0],res[1],res[2]);
+
+var res = nn.forward([-0.164152697,0.928279122,0,0,1,1,0,0]).outputs;
+console.log('Actual %s, prediction : %d %d %d','? ? ?',res[0],res[1],res[2]);
+
+
+
+
+
 
 
 
