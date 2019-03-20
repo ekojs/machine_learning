@@ -79,7 +79,12 @@ class feedforward{
         $res = 0;
         switch($type){
             case "sigmoid":
-                $res =  1 / (1+exp(-$x));
+                if(is_array($x)){
+                    $denom = array_reduce($x,function($i,$v){return $i+=exp($v);});
+                    $res = array_map(function($v) use($denom){return exp($v)/$denom;},$x);
+                }else{
+                    $res =  1 / (1+exp(-$x));
+                }
                 break;
         }
         return $res;
@@ -109,8 +114,10 @@ class feedforward{
             }
         }
 
-        $this->output = array_map(function($v,$k) use($outputs){return $outputs[$k]+$v;},$this->o_bias,array_keys($this->o_bias));
+        $o_sums = array_map(function($v,$k) use($outputs){return $outputs[$k]+$v;},$this->o_bias,array_keys($this->o_bias));
         
+        $this->output = $this->activation($o_sums);
+
         return array(
             "h_outputs" => $h_outputs,
             "outputs" => $this->output
