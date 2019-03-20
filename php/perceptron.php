@@ -1,7 +1,9 @@
 <?php
 /**
-	Created by Eko Junaidi Salam <eko_junaidisalam@live.com>
-**/
+ * Perceptron NN
+ * Created by Eko Junaidi Salam <eko_junaidisalam@live.com>
+ */
+
 class perceptron{
 	private $numInput;
 	private $inputs = array();
