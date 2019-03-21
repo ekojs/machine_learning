@@ -31,10 +31,20 @@ class feedforward{
     }
     
     private function initWeights(){
-        $this->ih_weights = array_map(function($v){},$this->ih_weights);
-        $this->h_bias = array_map(function($v){},$this->h_bias);
-        $this->ho_weights = array_map(function(){},$this->ho_weights);
-        $this->o_bias = array_map(function($v){},$this->o_bias);
+        $weights = function(){
+            $n_weights = ($this->n_dim_input*$this->n_dim_hidden)+$this->n_dim_hidden+($this->n_dim_hidden*$this->n_dim_output)+$this->n_dim_output;
+
+            $scale = sqrt(1/$n_weights);
+            for($i=0;$i<$n_weights;$i++){
+                yield $this->randn(0.0,$scale);
+            }
+        };
+        
+        $arr_weights = iterator_to_array($weights());
+        $this->ih_weights = array_map(function($v) use(&$arr_weights){return array_pop($arr_weights);},$this->ih_weights);
+        $this->h_bias = array_map(function($v) use(&$arr_weights){return array_pop($arr_weights);},$this->h_bias);
+        $this->ho_weights = array_map(function($v) use(&$arr_weights){return array_pop($arr_weights);},$this->ho_weights);
+        $this->o_bias = array_map(function($v) use(&$arr_weights){return array_pop($arr_weights);},$this->o_bias);
     }
 
     public function setIHWeights($ih_weights){
@@ -79,15 +89,35 @@ class feedforward{
         $res = 0;
         switch($type){
             case "sigmoid":
-                if(is_array($x)){
-                    $denom = array_reduce($x,function($i,$v){return $i+=exp($v);});
-                    $res = array_map(function($v) use($denom){return exp($v)/$denom;},$x);
-                }else{
-                    $res =  1 / (1+exp(-$x));
-                }
+                $res =  1 / (1+exp(-$x));
+                break;
+            case "softmax":
+                $denom = array_reduce($x,function($i,$v){return $i+=exp($v);});
+                $res = array_map(function($v) use($denom){return exp($v)/$denom;},$x);
                 break;
         }
         return $res;
+    }
+
+    public function gaussRandom(){
+        $return_v = false;
+		$v_val = 0.0;
+		if($return_v){
+			$return_v = false;
+			return $v_val;
+		}
+		$u = 2*(0.01*random_int(0,100))-1;
+		$v = 2*(0.01*random_int(0,100))-1;
+		$r = ($u*$u) + ($v*$v);
+		if($r == 0 || $r > 1) return $this->gaussRandom();
+		$c = sqrt(-2*log($r)/$r);
+		$v_val = $v*$c; // cache this
+		$return_v = true;
+		return $u*$c;
+    }
+
+    public function randn($mu,$std){
+        return $mu+$this->gaussRandom()*$std;
     }
 
     public function computeOutput($input){
@@ -116,7 +146,7 @@ class feedforward{
 
         $o_sums = array_map(function($v,$k) use($outputs){return $outputs[$k]+$v;},$this->o_bias,array_keys($this->o_bias));
         
-        $this->output = $this->activation($o_sums);
+        $this->output = $this->activation($o_sums,"softmax");
 
         return array(
             "h_outputs" => $h_outputs,
@@ -147,10 +177,10 @@ class feedforward{
 }
 
 $ff = new feedforward(3,4,2);
-$ff->setIHWeights(range(0.01,0.12,0.01));
-$ff->setHBias(range(0.13,0.16,0.01));
-$ff->setHOWeights(array(0.17,0.18,0.19,0.2,0.21,0.22,0.23,0.24));
-$ff->setOBias(range(0.25,0.26,0.01));
+// $ff->setIHWeights(range(0.01,0.12,0.01));
+// $ff->setHBias(range(0.13,0.16,0.01));
+// $ff->setHOWeights(array(0.17,0.18,0.19,0.2,0.21,0.22,0.23,0.24));
+// $ff->setOBias(range(0.25,0.26,0.01));
 
 // print_r($ff->getWeights());
 // print_r($ff->getBias());
